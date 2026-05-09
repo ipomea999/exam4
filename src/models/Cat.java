@@ -12,7 +12,6 @@ public class Cat {
     public Cat(String name, int age) {
         this.name = name;
         this.age = age;
-
         Random random = new Random();
         this.satiety = random.nextInt(61) + 20;
         this.mood = random.nextInt(61) + 20;
@@ -27,8 +26,16 @@ public class Cat {
         this.health = health;
     }
 
-    public int getAverageLevel() {
-        return (satiety + mood + health) / 3;
+    public int getIncreaseStep() {
+        if (age >= 1 && age <= 5) return 7;
+        if (age >= 6 && age <= 10) return 5;
+        return 4;
+    }
+
+    public int getDecreaseStep() {
+        if (age >= 1 && age <= 5) return 3;
+        if (age >= 6 && age <= 10) return 5;
+        return 6;
     }
 
     public void changeSatiety(int delta) {
@@ -41,6 +48,10 @@ public class Cat {
 
     public void changeHealth(int delta) {
         this.health = Math.max(0, Math.min(100, this.health + delta));
+    }
+
+    public int getAverageLevel() {
+        return (satiety + mood + health) / 3;
     }
 
     public String getName() { return name; }

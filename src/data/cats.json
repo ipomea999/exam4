@@ -2,29 +2,29 @@
   {
     "name": "Peach",
     "age": 11,
-    "satiety": 50,
-    "mood": 86,
+    "satiety": 54,
+    "mood": 90,
     "health": 78
   },
   {
     "name": "Jasper",
     "age": 12,
-    "satiety": 83,
-    "mood": 49,
+    "satiety": 87,
+    "mood": 53,
     "health": 83
   },
   {
     "name": "Poppy",
     "age": 9,
-    "satiety": 55,
-    "mood": 71,
-    "health": 38
+    "satiety": 40,
+    "mood": 56,
+    "health": 78
   },
   {
     "name": "Lolcat",
     "age": 5,
-    "satiety": 28,
-    "mood": 39,
-    "health": 52
+    "satiety": 40,
+    "mood": 71,
+    "health": 73
   }
 ]

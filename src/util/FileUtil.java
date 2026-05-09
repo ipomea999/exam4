@@ -1,8 +1,8 @@
 package util;
 
-import models.Cat;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import models.Cat;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -21,28 +21,20 @@ public class FileUtil {
             if (!Files.exists(PATH)) {
                 return new ArrayList<>();
             }
-
-            String read = Files.readString(PATH);
-            Cat[] catsArray = GSON.fromJson(read, Cat[].class);
-
-            if (catsArray == null) {
-                return new ArrayList<>();
-            }
-
-            return new ArrayList<>(Arrays.asList(catsArray));
-
+            String json = Files.readString(PATH);
+            Cat[] catsArray = GSON.fromJson(json, Cat[].class);
+            return catsArray == null ? new ArrayList<>() : new ArrayList<>(Arrays.asList(catsArray));
         } catch (IOException e) {
-            System.out.println("Ошибка чтения файла: " + e.getMessage());
             return new ArrayList<>();
         }
     }
 
     public static void writeCats(List<Cat> cats) {
-        String newJson = GSON.toJson(cats);
         try {
-            Files.writeString(PATH, newJson);
+            Files.createDirectories(PATH.getParent());
+            Files.writeString(PATH, GSON.toJson(cats));
         } catch (IOException e) {
-            System.out.println("Ошибка записи файла: " + e.getMessage());
+            System.out.println("Ошибка записи: " + e.getMessage());
         }
     }
 }

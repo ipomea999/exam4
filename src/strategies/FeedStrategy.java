@@ -1,10 +1,16 @@
 package strategies;
+
 import models.Cat;
 
 public class FeedStrategy implements CatActionStrategy {
     @Override
     public void performAction(Cat cat) {
-        cat.changeSatiety(20);
-        cat.changeMood(5);
+        cat.changeSatiety(cat.getIncreaseStep());
+        cat.changeMood(cat.getIncreaseStep());
+    }
+
+    @Override
+    public String getActionName() {
+        return "покормили кота";
     }
 }

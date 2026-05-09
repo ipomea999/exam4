@@ -5,8 +5,13 @@ import models.Cat;
 public class PlayStrategy implements CatActionStrategy {
     @Override
     public void performAction(Cat cat) {
-        cat.changeMood(25);
-        cat.changeSatiety(-10);
-        cat.changeHealth(-5);
+        cat.changeMood(cat.getIncreaseStep());
+        cat.changeHealth(cat.getIncreaseStep());
+        cat.changeSatiety(-cat.getDecreaseStep());
+    }
+
+    @Override
+    public String getActionName() {
+        return "поиграли с котом";
     }
 }

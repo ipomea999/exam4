@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Main {
+    private static Comparator<Cat> currentComparator = Comparator.comparingInt(Cat::getAverageLevel).reversed();
+
     public static void main(String[] args) {
         List<Cat> cats = FileUtil.readCats();
 
@@ -26,12 +28,12 @@ public class Main {
 
         while (true) {
             List<Cat> sortedCats = cats.stream()
-                    .sorted(Comparator.comparingInt(Cat::getAverageLevel).reversed())
+                    .sorted(currentComparator)
                     .collect(Collectors.toList());
 
             printTable(sortedCats);
 
-            System.out.println("1: покормить | 2: поиграть | 3: к ветеринару | 4: следующий день | а: новый питомец | 0: выход");
+            System.out.println("1: покормить | 2: поиграть | 3: к ветеринару | 4: следующий день | а: новый питомец | s: сортировка | 0: выход");
             System.out.print("Выберите действие: ");
             String choice = scanner.nextLine().trim().toLowerCase();
 
@@ -43,10 +45,16 @@ public class Main {
                 continue;
             }
 
+            if (choice.equals("s") || choice.equals("ы")) {
+                updateComparator(scanner);
+                continue;
+            }
+
             if (choice.equals("4")) {
                 cats.forEach(Cat::nextDay);
-                FileUtil.writeCats(cats);
                 System.out.println("\nНаступил следующий день! Характеристики всех питомцев изменились.\n");
+                removeDeadCats(cats);
+                FileUtil.writeCats(cats);
                 continue;
             }
 
@@ -55,6 +63,26 @@ public class Main {
                     () -> System.out.println("Неверный ввод.\n")
             );
         }
+    }
+
+    private static void updateComparator(Scanner scanner) {
+        System.out.println("Сортировать по: 1 - имя, 2 - возраст, 3 - здоровье, 4 - настроение, 5 - сытость, 6 - средний уровень");
+        System.out.print("Выбор: ");
+        String sortChoice = scanner.nextLine().trim();
+        currentComparator = switch (sortChoice) {
+            case "1" -> Comparator.comparing(Cat::getName);
+            case "2" -> Comparator.comparingInt(Cat::getAge);
+            case "3" -> Comparator.comparingInt(Cat::getHealth);
+            case "4" -> Comparator.comparingInt(Cat::getMood);
+            case "5" -> Comparator.comparingInt(Cat::getSatiety);
+            default -> Comparator.comparingInt(Cat::getAverageLevel).reversed();
+        };
+    }
+
+    private static void removeDeadCats(List<Cat> cats) {
+        List<Cat> deadCats = cats.stream().filter(c -> c.getHealth() <= 0).toList();
+        deadCats.forEach(c -> System.out.println(c.getName() + " умер"));
+        cats.removeAll(deadCats);
     }
 
     private static void processAction(Scanner scanner, List<Cat> sortedCats, List<Cat> allCats, CatActionStrategy strategy) {
@@ -69,8 +97,9 @@ public class Main {
                 } else {
                     String resultMessage = strategy.performAction(selectedCat);
                     selectedCat.markActionDone();
-                    FileUtil.writeCats(allCats);
                     System.out.println("\nВы " + resultMessage + "\n");
+                    removeDeadCats(allCats);
+                    FileUtil.writeCats(allCats);
                 }
             } else {
                 System.out.println("Нет такого номера.\n");

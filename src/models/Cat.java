@@ -1,5 +1,6 @@
 package models;
 
+import strategies.age.*;
 import java.util.Random;
 
 public class Cat {
@@ -38,15 +39,17 @@ public class Cat {
     }
 
     public int getIncreaseStep() {
-        if (age >= 1 && age <= 5) return 7;
-        if (age >= 6 && age <= 10) return 5;
-        return 4;
+        return getAgeStrategy().getIncreaseStep();
     }
 
     public int getDecreaseStep() {
-        if (age >= 1 && age <= 5) return 3;
-        if (age >= 6 && age <= 10) return 5;
-        return 6;
+        return getAgeStrategy().getDecreaseStep();
+    }
+
+    private AgeStrategy getAgeStrategy() {
+        if (age >= 1 && age <= 5) return new YoungCatStrategy();
+        if (age >= 6 && age <= 10) return new AdultCatStrategy();
+        return new SeniorCatStrategy();
     }
 
     public void changeSatiety(int delta) {

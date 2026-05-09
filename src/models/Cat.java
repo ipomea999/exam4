@@ -31,13 +31,21 @@ public class Cat {
         return (satiety + mood + health) / 3;
     }
 
+    public void changeSatiety(int delta) {
+        this.satiety = Math.max(0, Math.min(100, this.satiety + delta));
+    }
+
+    public void changeMood(int delta) {
+        this.mood = Math.max(0, Math.min(100, this.mood + delta));
+    }
+
+    public void changeHealth(int delta) {
+        this.health = Math.max(0, Math.min(100, this.health + delta));
+    }
+
     public String getName() { return name; }
     public int getAge() { return age; }
     public int getSatiety() { return satiety; }
     public int getMood() { return mood; }
     public int getHealth() { return health; }
-
-    public void setSatiety(int satiety) { this.satiety = satiety; }
-    public void setMood(int mood) { this.mood = mood; }
-    public void setHealth(int health) { this.health = health; }
 }

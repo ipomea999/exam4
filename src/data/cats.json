@@ -9,8 +9,8 @@
   {
     "name": "Jasper",
     "age": 12,
-    "satiety": 43,
-    "mood": 39,
+    "satiety": 83,
+    "mood": 49,
     "health": 83
   },
   {
@@ -19,5 +19,12 @@
     "satiety": 55,
     "mood": 71,
     "health": 38
+  },
+  {
+    "name": "Lolcat",
+    "age": 5,
+    "satiety": 28,
+    "mood": 39,
+    "health": 52
   }
 ]

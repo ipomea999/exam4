@@ -4,6 +4,7 @@ import util.FileUtil;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Main {
     public static void main(String[] args) {
@@ -49,32 +50,33 @@ public class Main {
                 continue;
             }
 
-            CatActionStrategy strategy = actions.get(choice);
-            if (strategy == null) {
-                System.out.println("Неверный ввод.\n");
-                continue;
-            }
+            Optional.ofNullable(actions.get(choice)).ifPresentOrElse(
+                    strategy -> processAction(scanner, sortedCats, cats, strategy),
+                    () -> System.out.println("Неверный ввод.\n")
+            );
+        }
+    }
 
-            System.out.print("Введите номер кота (1-" + sortedCats.size() + "): ");
-            try {
-                int index = Integer.parseInt(scanner.nextLine().trim()) - 1;
-                if (index >= 0 && index < sortedCats.size()) {
-                    Cat selectedCat = sortedCats.get(index);
+    private static void processAction(Scanner scanner, List<Cat> sortedCats, List<Cat> allCats, CatActionStrategy strategy) {
+        System.out.print("Введите номер кота (1-" + sortedCats.size() + "): ");
+        try {
+            int index = Integer.parseInt(scanner.nextLine().trim()) - 1;
+            if (index >= 0 && index < sortedCats.size()) {
+                Cat selectedCat = sortedCats.get(index);
 
-                    if (selectedCat.hasActedToday()) {
-                        System.out.println("\nС этим котом уже выполняли действие сегодня! Ждите следующего дня.\n");
-                    } else {
-                        strategy.performAction(selectedCat);
-                        selectedCat.markActionDone();
-                        FileUtil.writeCats(cats);
-                        System.out.println("\nВы " + strategy.getActionName() + " " + selectedCat.getName() + ", возраст: " + selectedCat.getAge() + "\n");
-                    }
+                if (selectedCat.hasActedToday()) {
+                    System.out.println("\nС этим котом уже выполняли действие сегодня! Ждите следующего дня.\n");
                 } else {
-                    System.out.println("Нет такого номера.\n");
+                    String resultMessage = strategy.performAction(selectedCat);
+                    selectedCat.markActionDone();
+                    FileUtil.writeCats(allCats);
+                    System.out.println("\nВы " + resultMessage + "\n");
                 }
-            } catch (NumberFormatException e) {
-                System.out.println("Введите число!\n");
+            } else {
+                System.out.println("Нет такого номера.\n");
             }
+        } catch (NumberFormatException e) {
+            System.out.println("Введите число!\n");
         }
     }
 
@@ -98,12 +100,14 @@ public class Main {
         System.out.println("+----+--------------+---------+----------+------------+---------+----------+");
         System.out.println("| #  | Имя          | Возраст | Здоровье | Настроение | Сытость | Средний  |");
         System.out.println("+----+--------------+---------+----------+------------+---------+----------+");
-        for (int i = 0; i < cats.size(); i++) {
+
+        IntStream.range(0, cats.size()).forEach(i -> {
             Cat c = cats.get(i);
             String nameColumn = (c.hasActedToday() ? "* " : "  ") + c.getName();
             System.out.printf("| %-2d | %-12s | %-7d | %-8d | %-10d | %-7d | %-8d |\n",
                     (i + 1), nameColumn, c.getAge(), c.getHealth(), c.getMood(), c.getSatiety(), c.getAverageLevel());
-        }
+        });
+
         System.out.println("+----+--------------+---------+----------+------------+---------+----------+");
     }
 }

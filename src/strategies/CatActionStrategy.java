@@ -1,8 +1,7 @@
 package strategies;
-
 import models.Cat;
 
+@FunctionalInterface
 public interface CatActionStrategy {
-    void performAction(Cat cat);
-    String getActionName();
+    String performAction(Cat cat);
 }

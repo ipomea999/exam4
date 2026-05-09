@@ -30,7 +30,7 @@ public class Main {
 
             printTable(sortedCats);
 
-            System.out.println("1: покормить | 2: поиграть | 3: к ветеринару | а: новый питомец | 0: выход");
+            System.out.println("1: покормить | 2: поиграть | 3: к ветеринару | 4: следующий день | а: новый питомец | 0: выход");
             System.out.print("Выберите действие: ");
             String choice = scanner.nextLine().trim().toLowerCase();
 
@@ -39,6 +39,13 @@ public class Main {
             if (choice.equals("a") || choice.equals("а")) {
                 addNewCat(scanner, cats);
                 FileUtil.writeCats(cats);
+                continue;
+            }
+
+            if (choice.equals("4")) {
+                cats.forEach(Cat::nextDay);
+                FileUtil.writeCats(cats);
+                System.out.println("\nНаступил следующий день! Характеристики всех питомцев изменились.\n");
                 continue;
             }
 
@@ -53,9 +60,15 @@ public class Main {
                 int index = Integer.parseInt(scanner.nextLine().trim()) - 1;
                 if (index >= 0 && index < sortedCats.size()) {
                     Cat selectedCat = sortedCats.get(index);
-                    strategy.performAction(selectedCat);
-                    FileUtil.writeCats(cats);
-                    System.out.println("\nВы " + strategy.getActionName() + " " + selectedCat.getName() + "\n");
+
+                    if (selectedCat.hasActedToday()) {
+                        System.out.println("\nС этим котом уже выполняли действие сегодня! Ждите следующего дня.\n");
+                    } else {
+                        strategy.performAction(selectedCat);
+                        selectedCat.markActionDone();
+                        FileUtil.writeCats(cats);
+                        System.out.println("\nВы " + strategy.getActionName() + " " + selectedCat.getName() + ", возраст: " + selectedCat.getAge() + "\n");
+                    }
                 } else {
                     System.out.println("Нет такого номера.\n");
                 }
@@ -82,14 +95,15 @@ public class Main {
     }
 
     private static void printTable(List<Cat> cats) {
-        System.out.println("+----+------------+---------+----------+------------+---------+----------+");
-        System.out.println("| #  | Имя        | Возраст | Здоровье | Настроение | Сытость | Средний  |");
-        System.out.println("+----+------------+---------+----------+------------+---------+----------+");
+        System.out.println("+----+--------------+---------+----------+------------+---------+----------+");
+        System.out.println("| #  | Имя          | Возраст | Здоровье | Настроение | Сытость | Средний  |");
+        System.out.println("+----+--------------+---------+----------+------------+---------+----------+");
         for (int i = 0; i < cats.size(); i++) {
             Cat c = cats.get(i);
-            System.out.printf("| %-2d | %-10s | %-7d | %-8d | %-10d | %-7d | %-8d |\n",
-                    (i + 1), c.getName(), c.getAge(), c.getHealth(), c.getMood(), c.getSatiety(), c.getAverageLevel());
+            String nameColumn = (c.hasActedToday() ? "* " : "  ") + c.getName();
+            System.out.printf("| %-2d | %-12s | %-7d | %-8d | %-10d | %-7d | %-8d |\n",
+                    (i + 1), nameColumn, c.getAge(), c.getHealth(), c.getMood(), c.getSatiety(), c.getAverageLevel());
         }
-        System.out.println("+----+------------+---------+----------+------------+---------+----------+");
+        System.out.println("+----+--------------+---------+----------+------------+---------+----------+");
     }
 }

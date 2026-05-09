@@ -3,19 +3,22 @@ package models;
 import java.util.Random;
 
 public class Cat {
+    private static final Random RANDOM = new Random();
+
     private String name;
     private int age;
     private int satiety;
     private int mood;
     private int health;
+    private boolean actionPerformedToday;
 
     public Cat(String name, int age) {
         this.name = name;
         this.age = age;
-        Random random = new Random();
-        this.satiety = random.nextInt(61) + 20;
-        this.mood = random.nextInt(61) + 20;
-        this.health = random.nextInt(61) + 20;
+        this.satiety = RANDOM.nextInt(61) + 20;
+        this.mood = RANDOM.nextInt(61) + 20;
+        this.health = RANDOM.nextInt(61) + 20;
+        this.actionPerformedToday = false;
     }
 
     public Cat(String name, int age, int satiety, int mood, int health) {
@@ -24,6 +27,14 @@ public class Cat {
         this.satiety = satiety;
         this.mood = mood;
         this.health = health;
+        this.actionPerformedToday = false;
+    }
+
+    public void nextDay() {
+        changeSatiety(-(RANDOM.nextInt(5) + 1));
+        changeMood(RANDOM.nextInt(7) - 3);
+        changeHealth(RANDOM.nextInt(7) - 3);
+        this.actionPerformedToday = false;
     }
 
     public int getIncreaseStep() {
@@ -48,6 +59,14 @@ public class Cat {
 
     public void changeHealth(int delta) {
         this.health = Math.max(0, Math.min(100, this.health + delta));
+    }
+
+    public void markActionDone() {
+        this.actionPerformedToday = true;
+    }
+
+    public boolean hasActedToday() {
+        return actionPerformedToday;
     }
 
     public int getAverageLevel() {

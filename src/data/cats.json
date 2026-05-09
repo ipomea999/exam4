@@ -2,29 +2,33 @@
   {
     "name": "Peach",
     "age": 11,
-    "satiety": 54,
-    "mood": 90,
-    "health": 78
+    "satiety": 28,
+    "mood": 98,
+    "health": 74,
+    "actionPerformedToday": false
   },
   {
     "name": "Jasper",
     "age": 12,
-    "satiety": 87,
-    "mood": 53,
-    "health": 83
+    "satiety": 62,
+    "mood": 54,
+    "health": 97,
+    "actionPerformedToday": false
   },
   {
     "name": "Poppy",
     "age": 9,
-    "satiety": 40,
-    "mood": 56,
-    "health": 78
+    "satiety": 27,
+    "mood": 59,
+    "health": 87,
+    "actionPerformedToday": true
   },
   {
     "name": "Lolcat",
     "age": 5,
-    "satiety": 40,
-    "mood": 71,
-    "health": 73
+    "satiety": 21,
+    "mood": 76,
+    "health": 70,
+    "actionPerformedToday": true
   }
 ]

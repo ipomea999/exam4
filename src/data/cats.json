@@ -1,0 +1,23 @@
+[
+  {
+    "name": "Peach",
+    "age": 11,
+    "satiety": 50,
+    "mood": 86,
+    "health": 78
+  },
+  {
+    "name": "Jasper",
+    "age": 12,
+    "satiety": 43,
+    "mood": 39,
+    "health": 83
+  },
+  {
+    "name": "Poppy",
+    "age": 9,
+    "satiety": 55,
+    "mood": 71,
+    "health": 38
+  }
+]
